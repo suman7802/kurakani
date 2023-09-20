@@ -19,6 +19,7 @@ model Users {
   migrated_date DateTime?
 }
 
+
 model Posts {
   id Int  @id @default(autoincrement())
   user Users @relation(fields: [user_id], references: [id])
