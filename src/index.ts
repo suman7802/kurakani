@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(parser.urlencoded({extended: true}));
 app.use(
   session({
-    secret: 'mansu7802@gmail.com',
+    secret: process.env.SECRET as string,
     resave: false,
     saveUninitialized: true,
     cookie: {

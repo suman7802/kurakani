@@ -5,4 +5,3 @@ declare global {
     export interface User extends Prisma.UsersFieldRefs {}
   }
 }
-// export interface User {name: string}
