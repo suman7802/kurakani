@@ -2,11 +2,13 @@ require('dotenv').config();
 import express, {Application} from 'express';
 import helmet from 'helmet';
 import * as parser from 'body-parser';
+import passport from 'passport';
+import session from 'express-session';
+
+import './types/custom';
 import {authenticate} from './routes/authenticate';
 import {postRouter} from './routes/postRouter';
 import {commentRouter} from './routes/commentRouter';
-import passport from 'passport';
-import session from 'express-session';
 
 const app: Application = express();
 const port = process.env.PORT;

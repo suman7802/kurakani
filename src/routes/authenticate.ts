@@ -4,6 +4,7 @@ import {VerifyCallback} from 'passport-google-oauth20';
 
 import {googleAuth} from '../services/googleAuth';
 import {facebookAuth} from '../services/facebookAuth';
+import {localAuth} from '../services/localAuth';
 
 function authenticate(app: Application, passport: PassportStatic) {
   //google strategy
@@ -11,6 +12,9 @@ function authenticate(app: Application, passport: PassportStatic) {
 
   //facebook strategy
   facebookAuth(passport);
+
+  // local strategy
+  localAuth(passport);
 
   passport.serializeUser((user: Express.User, done: VerifyCallback) => {
     done(null, user);
@@ -45,6 +49,15 @@ function authenticate(app: Application, passport: PassportStatic) {
       failureRedirect: '/',
       successRedirect: '/dashboard',
     })
+  );
+
+  //local login/redirect
+  app.post(
+    '/login',
+    passport.authenticate('local', {failureRedirect: '/login'}),
+    function (req, res) {
+      res.redirect('/dashboard');
+    }
   );
 }
 
