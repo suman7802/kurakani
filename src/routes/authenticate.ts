@@ -51,9 +51,9 @@ function authenticate(app: Application, passport: PassportStatic) {
     })
   );
 
-  //local login/redirect
+  //local login
   app.post(
-    '/login',
+    '/api/user/login',
     passport.authenticate('local', {failureRedirect: '/login'}),
     function (req, res) {
       res.redirect('/dashboard');

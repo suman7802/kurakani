@@ -25,12 +25,19 @@ model Posts {
   user_id      Int
   title        String     @unique
   blog         String
-  private      Boolean    @default(false)
-  likes        Int        @default(0)
+  privacy      Boolean    @default(false)
   created_date DateTime   @default(now())
   edited_date  DateTime?
   comments     Comments[]
+  likes        Likes[]
   user         Users      @relation(fields: [user_id], references: [id])
+}
+
+model Likes {
+  id         Int   @id @default(autoincrement())
+  post_id    Int
+  like_count Int   @default(0)
+  post       Posts @relation(fields: [post_id], references: [id])
 }
 
 model Comments {

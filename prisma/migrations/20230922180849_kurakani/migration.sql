@@ -19,12 +19,20 @@ CREATE TABLE "Posts" (
     "user_id" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "blog" TEXT NOT NULL,
-    "private" BOOLEAN NOT NULL DEFAULT false,
-    "likes" INTEGER NOT NULL DEFAULT 0,
+    "privacy" BOOLEAN NOT NULL DEFAULT false,
     "created_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "edited_date" TIMESTAMP(3),
 
     CONSTRAINT "Posts_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Likes" (
+    "id" SERIAL NOT NULL,
+    "post_id" INTEGER NOT NULL,
+    "like_count" INTEGER NOT NULL DEFAULT 0,
+
+    CONSTRAINT "Likes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -54,6 +62,9 @@ CREATE UNIQUE INDEX "Posts_title_key" ON "Posts"("title");
 
 -- AddForeignKey
 ALTER TABLE "Posts" ADD CONSTRAINT "Posts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Likes" ADD CONSTRAINT "Likes_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "Posts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comments" ADD CONSTRAINT "Comments_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "Posts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

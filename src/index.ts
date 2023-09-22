@@ -10,6 +10,7 @@ import {authenticate} from './routes/authenticate';
 import {userRouter} from './routes/userRouter';
 import {postRouter} from './routes/postRouter';
 import {commentRouter} from './routes/commentRouter';
+import {authentication} from './middleware/authentication';
 
 const app: Application = express();
 const port = process.env.PORT;
@@ -33,8 +34,8 @@ app.use(passport.session());
 
 authenticate(app, passport);
 app.use('/api/user', userRouter);
-app.use('/api/post', postRouter);
-app.use('/api/comment', commentRouter);
+app.use('/api/post', authentication, postRouter);
+app.use('/api/comment', authentication, commentRouter);
 
 app.get('/dashboard', (req: Request, res: Response) => {
   res.json({

@@ -3,5 +3,5 @@ const userRouter = Router();
 
 import {getCreateUser} from '../models/user';
 
-userRouter.post('/login', getCreateUser);
+userRouter.post('/otp', getCreateUser);
 export {userRouter};
