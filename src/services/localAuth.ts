@@ -26,8 +26,7 @@ function localAuth(passport: PassportStatic) {
           user.otp_expire &&
           user.otp_expire.getUTCSeconds() - currentDate.getUTCSeconds() > 0;
 
-          // OtpNotExpired && user.otp === otp
-        if (1) {
+        if (OtpNotExpired && user.otp === otp) {
           // @ts-ignore
           return done(null, user);
         } else {
