@@ -2,10 +2,11 @@
 CREATE TABLE "Users" (
     "id" SERIAL NOT NULL,
     "social_id" TEXT,
-    "user_naem" TEXT,
+    "user_name" TEXT,
     "email" TEXT,
     "provider" TEXT NOT NULL,
-    "otp" TIMESTAMP(3),
+    "otp" TEXT,
+    "otp_expire" TIMESTAMP(3),
     "registered_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "migrated_date" TIMESTAMP(3),
 
