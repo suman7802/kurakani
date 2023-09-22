@@ -28,7 +28,6 @@ function localAuth(passport: PassportStatic) {
           // @ts-ignore
           return done(null, user);
         } else {
-          // some work here
           return done(null, false);
         }
       }

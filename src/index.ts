@@ -1,5 +1,5 @@
 require('dotenv').config();
-import express, {Application} from 'express';
+import express, {Application, Request, Response} from 'express';
 import helmet from 'helmet';
 import * as parser from 'body-parser';
 import passport from 'passport';
@@ -16,6 +16,7 @@ const port = process.env.PORT;
 
 app.use(helmet());
 app.use(express.json());
+
 app.use(parser.urlencoded({extended: true}));
 app.use(
   session({
@@ -35,7 +36,7 @@ app.use('/api/user', userRouter);
 app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
 
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', (req: Request, res: Response) => {
   res.json({
     status: 'successfully login',
   });
