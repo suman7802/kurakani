@@ -20,9 +20,11 @@ function localAuth(passport: PassportStatic) {
           },
         });
 
-        const currentDate: any = new Date();
-        // @ts-ignores
-        const OtpNotExpired = user.otp_expire - currentDate > 0;
+        const currentDate = new Date();
+
+        const OtpNotExpired =
+          user.otp_expire &&
+          user.otp_expire.getUTCSeconds() - currentDate.getUTCSeconds() > 0;
 
         if (OtpNotExpired && user.otp === otp) {
           // @ts-ignore
