@@ -1,4 +1,3 @@
-import express from 'express';
 import expressSession from 'express-session';
 
 declare module 'express-session' {

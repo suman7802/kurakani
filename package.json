@@ -5,20 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run dist-ts && node dist/index.js",
+    "build": "tsc",
     "dev": "conc . \"npx tsc --watch\" \"nodemon dist/index.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.6.2",
-    "@types/typescript": "^2.0.0",
-    "concurrently": "^8.2.1",
-    "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
-  },
-  "dependencies": {
     "@prisma/client": "^5.3.1",
     "@types/body-parser": "^1.19.3",
     "@types/express": "^4.17.17",
@@ -29,6 +22,14 @@
     "@types/passport-facebook": "^3.0.0",
     "@types/passport-google-oauth20": "^2.0.11",
     "@types/passport-local": "^1.0.35",
+    "@types/node": "^20.6.2",
+    "@types/typescript": "^2.0.0",
+    "concurrently": "^8.2.1",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
     "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
