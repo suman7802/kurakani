@@ -5,7 +5,6 @@ const OAuth2 = google.auth.OAuth2;
 
 const createTransporter = async () => {
   try {
-    console.log('Creating transporter...');
     const oauth2Client = new OAuth2(
       process.env.NODEMAILER_CLIENT_ID,
       process.env.NODEMAILER_CLIENT_SECRET,
@@ -19,14 +18,11 @@ const createTransporter = async () => {
     const accessToken = await new Promise((resolve, reject) => {
       oauth2Client.getAccessToken((err, token) => {
         if (err) {
-          console.log(err);
           reject();
         }
         resolve(token);
       });
     });
-
-    console.log(accessToken);
 
     const transporter = nodemailer.createTransport({
       // @ts-ignore
@@ -41,7 +37,6 @@ const createTransporter = async () => {
       },
     });
 
-    console.log('Transporter created successfully.');
     return transporter;
   } catch (err) {
     console.error('Error creating transporter:', err);
@@ -61,8 +56,6 @@ export const sendMailForOtp = (otp: string, email: string) => {
     html: `Your OTP is : <b> ${otp} </b>`,
     to: email,
   };
-
-  console.log(email, otp);
 
   return new Promise((resolve, reject) => {
     return mailTransporter.sendMail(emailConfig, (err, info) => {

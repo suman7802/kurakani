@@ -7,6 +7,7 @@ import session from 'express-session';
 
 import './types/custom';
 import {authenticate} from './routes/authenticate';
+import {userRouter} from './routes/userRouter';
 import {postRouter} from './routes/postRouter';
 import {commentRouter} from './routes/commentRouter';
 
@@ -30,6 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 authenticate(app, passport);
+app.use('/api/user', userRouter);
 app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
 
