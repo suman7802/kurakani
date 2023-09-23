@@ -14,7 +14,7 @@ export async function otpExpireCheck(email: string) {
         throw err;
       });
 
-    if (user.otp_expire) {
+    if (user && user?.otp_expire) {
       const NotExpired =
         user.otp_expire?.getUTCSeconds() - currentDate.getUTCSeconds() > 0;
       return NotExpired;

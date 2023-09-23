@@ -3,11 +3,11 @@ import {commentModel} from '../models/comment';
 
 export const commentController = {
   addComment: async (req: Request, res: Response) => {
-    const {comment, post_id} = req.body;
+    const {comment, postId} = req.body;
     const userId = req.user?.id;
 
     await commentModel
-      .createComment(comment, userId, post_id)
+      .createComment(comment, userId, postId)
       .then((response) => {
         return res.send(response);
       })
