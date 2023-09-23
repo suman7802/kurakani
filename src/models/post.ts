@@ -112,7 +112,6 @@ export const postModel = {
       });
       return deletedPost;
     } catch (error) {
-      console.error(error);
       throw error;
     }
   },

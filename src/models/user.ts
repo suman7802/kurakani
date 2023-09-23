@@ -4,6 +4,8 @@ import otpGenerator from 'otp-generator';
 import {prisma} from './db';
 import {sendMailForOtp} from '../services/sendOTP';
 import {Request, Response} from 'express';
+import {getUser} from '../utils/userCheck';
+import {otpExpireCheck} from '../utils/otpExpireCheck';
 
 // Generate OTP
 function getOTP() {
@@ -23,25 +25,17 @@ function otpTime() {
 // Handle OTP creation and user creation/updating
 export async function getCreateUser(req: Request, res: Response) {
   const email = req.body.email;
-  try {
-    const [existingUser] = await prisma.users.findMany({
-      where: {
-        email: email,
-        provider: 'manual',
-      },
-    });
 
-    const currentDate: any = new Date();
-    const isOtpExpired =
-      // @ts-ignores
-      existingUser && existingUser.otp_expire - currentDate < 0;
+  const OtpNotExpired = await otpExpireCheck(email);
+  const user = await getUser(email);
 
-    if (existingUser && isOtpExpired) {
-      // Regenerate OTP and update expiration time
-      const otp = getOTP();
-      const otp_expire = otpTime();
+  if (user && !OtpNotExpired) {
+    // Regenerate OTP and update expiration time
+    const otp = getOTP();
+    const otp_expire = otpTime();
 
-      await prisma.users.updateMany({
+    await prisma.users
+      .updateMany({
         where: {
           email: email,
           provider: 'manual',
@@ -50,33 +44,40 @@ export async function getCreateUser(req: Request, res: Response) {
           otp: otp,
           otp_expire: otp_expire,
         },
+      })
+      .catch((err) => {
+        throw err;
       });
 
-      const response = await sendMailForOtp(otp, email);
-      res.send(response);
-    } else {
-      if (!existingUser) {
-        // If no user exists, create a new user
-        const otp = getOTP();
-        const otp_expire = otpTime();
+    const response = await sendMailForOtp(otp, email).catch((err) => {
+      throw err;
+    });
 
-        await prisma.users.create({
+    return res.send(response);
+  } else {
+    // If no user exists, create a new user
+    if (!user) {
+      const otp = getOTP();
+      const otp_expire = otpTime();
+
+      await prisma.users
+        .create({
           data: {
             email: email,
             otp: otp,
             otp_expire: otp_expire,
             provider: 'manual',
           },
+        })
+        .catch((err) => {
+          throw err;
         });
 
-        const response = await sendMailForOtp(otp, email);
-        res.send(response);
-      } else {
-        // If user exists, and unexpired otp
-        res.send('suer you valid otp to login');
-      }
+      const response = await sendMailForOtp(otp, email);
+      return res.send(response);
+    } else {
+      // If user exists, and unexpired otp
+      res.send('use your valid otp to login');
     }
-  } catch (error) {
-    throw error;
   }
 }

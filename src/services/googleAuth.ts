@@ -12,12 +12,7 @@ function googleAuth(passport: PassportStatic) {
         clientSecret: process.env.G_CLIENT_SECRET as string,
         callbackURL: process.env.G_CALLBACK_URL as string,
       },
-      async (
-        _accessToken,
-        _refreshToken,
-        profile,
-        done
-      ) => {
+      async (_accessToken, _refreshToken, profile, done) => {
         try {
           // get user
           const existingUser = await prisma.Users.findOne({

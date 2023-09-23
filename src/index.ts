@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import * as parser from 'body-parser';
 import passport from 'passport';
 import session from 'express-session';
+import morgan from 'morgan';
 
 import './types/custom';
 import {authenticate} from './routes/authenticate';
@@ -16,8 +17,8 @@ const app: Application = express();
 const port = process.env.PORT;
 
 app.use(helmet());
+app.use(morgan('dev'));
 app.use(express.json());
-
 app.use(parser.urlencoded({extended: true}));
 app.use(
   session({

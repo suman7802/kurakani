@@ -1,7 +1,8 @@
 require('dotenv').config();
 import {PassportStatic} from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
-import {prisma} from '../models/db';
+import {otpExpireCheck} from '../utils/otpExpireCheck';
+import {getUser} from '../utils/userCheck';
 
 function localAuth(passport: PassportStatic) {
   passport.use(
@@ -13,24 +14,17 @@ function localAuth(passport: PassportStatic) {
         session: true,
       },
       async function (req, email, otp, done) {
-        const [user] = await prisma.users.findMany({
-          where: {
-            email: email,
-            provider: 'manual',
-          },
-        });
+        try {
+          const OtpNotExpired = await otpExpireCheck(email);
+          const user = await getUser(email);
 
-        const currentDate = new Date();
-
-        const OtpNotExpired =
-          user.otp_expire &&
-          user.otp_expire.getUTCSeconds() - currentDate.getUTCSeconds() > 0;
-
-        if (OtpNotExpired && user.otp === otp) {
-          // @ts-ignore
-          return done(null, user);
-        } else {
+          if (OtpNotExpired && user.otp === otp) {
+            // @ts-ignore
+            return done(null, user);
+          }
           return done(null, false);
+        } catch (error) {
+          throw error;
         }
       }
     )

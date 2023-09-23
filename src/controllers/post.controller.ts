@@ -5,7 +5,13 @@ export const postController = {
   addPost: async (req: Request, res: Response) => {
     const {title, blog, privacy} = req.body;
     const userId = req.user?.id;
-    const alreadyHaveTitle = await postModel.titleAvailability(title);
+
+    const alreadyHaveTitle = await postModel
+      .titleAvailability(title)
+      .catch((err) => {
+        throw err;
+      });
+
     if (alreadyHaveTitle) {
       return res.send('Title is taken');
     }
@@ -13,10 +19,10 @@ export const postController = {
     await postModel
       .createPost(title, blog, privacy, userId)
       .then((response) => {
-        res.send(response);
+        return res.send(response);
       })
       .catch((error) => {
-        res.send(error as string);
+        throw error;
       });
   },
 
@@ -24,10 +30,10 @@ export const postController = {
     await postModel
       .readAllPublicPost()
       .then((response) => {
-        res.send(response);
+        return res.send(response);
       })
       .catch((error) => {
-        res.send(error as string);
+        throw error;
       });
   },
 
@@ -39,7 +45,7 @@ export const postController = {
         res.send(response);
       })
       .catch((error) => {
-        res.send(error as string);
+        throw error;
       });
   },
 
@@ -52,7 +58,7 @@ export const postController = {
         res.send(response);
       })
       .catch((error) => {
-        res.send(error as string);
+        throw error;
       });
   },
 
@@ -65,7 +71,7 @@ export const postController = {
         res.send(response);
       })
       .catch((error) => {
-        res.send(error as string);
+        throw error;
       });
   },
 
@@ -78,7 +84,7 @@ export const postController = {
         res.send(response);
       })
       .catch((error) => {
-        res.send(error as string);
+        throw error;
       });
   },
 };

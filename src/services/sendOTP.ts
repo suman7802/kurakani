@@ -39,8 +39,7 @@ const createTransporter = async () => {
 
     return transporter;
   } catch (err) {
-    console.error('Error creating transporter:', err);
-    return err;
+    throw err;
   }
 };
 
