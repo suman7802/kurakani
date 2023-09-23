@@ -15,16 +15,16 @@ function googleAuth(passport: PassportStatic) {
       async (_accessToken, _refreshToken, profile, done) => {
         try {
           // get user
-          const existingUser = await prisma.Users.findOne({
-            social_id: profile.id,
+          const existingUser = await prisma.user.findOne({
+            socialId: profile.id,
             provider: profile.provider,
           });
 
           // create user
           if (!existingUser) {
-            const newUser = await prisma.User.create({
-              social_id: profile.id,
-              user_name: profile.displayName,
+            const newUser = await prisma.user.create({
+              socialId: profile.id,
+              userName: profile.displayName,
               email: profile._json.email,
               provider: profile.provider,
             });

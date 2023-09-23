@@ -2,7 +2,7 @@ import {prisma} from './db';
 export const postModel = {
   titleAvailability: async (title: string) => {
     try {
-      const [response] = await prisma.posts.findMany({
+      const [response] = await prisma.post.findMany({
         where: {
           title: title,
         },
@@ -15,18 +15,18 @@ export const postModel = {
 
   createPost: async (
     title: string,
-    blog: string,
+    content: string,
     privacy: boolean,
     userId: any
   ) => {
     try {
-      const post = await prisma.posts.create({
+      const post = await prisma.post.create({
         data: {
           user: {
             connect: {id: userId},
           },
           title,
-          blog,
+          content,
           privacy,
         },
       });
@@ -38,7 +38,7 @@ export const postModel = {
 
   readAllPublicPost: async () => {
     try {
-      const allPublicPosts = await prisma.posts.findMany({
+      const allPublicPosts = await prisma.post.findMany({
         where: {
           privacy: false,
         },
@@ -49,7 +49,7 @@ export const postModel = {
       });
 
       const allPublicPostsExcludingUserId = allPublicPosts.map((item) => {
-        const {user_id, ...rest} = item;
+        const {userId, ...rest} = item;
         return rest;
       });
 
@@ -61,9 +61,9 @@ export const postModel = {
 
   readAllPost: async (userId: any) => {
     try {
-      const allPosts = await prisma.posts.findMany({
+      const allPosts = await prisma.post.findMany({
         where: {
-          user_id: userId,
+          userId: userId,
         },
         include: {
           comments: true,
@@ -78,10 +78,10 @@ export const postModel = {
 
   readPost: async (userId: any, postId: number) => {
     try {
-      const allMyPosts = await prisma.posts.findUnique({
+      const allMyPosts = await prisma.post.findUnique({
         where: {
           id: postId,
-          user_id: userId,
+          userId: userId,
         },
         include: {
           comments: true,
@@ -98,18 +98,18 @@ export const postModel = {
     id: number,
     userId: any,
     title: string,
-    blog: string,
+    content: string,
     privacy: boolean
   ) => {
     try {
-      const allMyPosts = await prisma.posts.update({
+      const allMyPosts = await prisma.post.update({
         where: {
           id: id,
-          user_id: userId,
+          userId: userId,
         },
         data: {
           title: title,
-          blog: blog,
+          content: content,
           privacy: privacy,
         },
       });
@@ -121,10 +121,10 @@ export const postModel = {
 
   deletePost: async (postId: number, userId: any) => {
     try {
-      const deletedPost = await prisma.posts.delete({
+      const deletedPost = await prisma.post.delete({
         where: {
           id: postId,
-          user_id: userId,
+          userId: userId,
         },
       });
       return deletedPost;

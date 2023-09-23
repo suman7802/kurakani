@@ -1,6 +1,6 @@
 import {prisma} from '../models/db';
 export async function getUser(email: string) {
-  const [user] = await prisma.users
+  const [user] = await prisma.user
     .findMany({
       where: {
         email: email,

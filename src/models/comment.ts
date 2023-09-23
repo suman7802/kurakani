@@ -3,7 +3,7 @@ import {prisma} from './db';
 export const commentModel = {
   createComment: async (comment: string, userId: any, postId: number) => {
     try {
-      const post = await prisma.comments.create({
+      const post = await prisma.comment.create({
         data: {
           user: {
             connect: {id: userId},
@@ -20,16 +20,37 @@ export const commentModel = {
     }
   },
 
+  createCommentReply: async (
+    userId: number,
+    postId: number,
+    commentId: number,
+    comment: string
+  ) => {
+    try {
+      const nestedComment = await prisma.comment.create({
+        data: {
+          userId: userId,
+          postId: postId,
+          parentCommentId: commentId,
+          comment: comment,
+        },
+      });
+      return nestedComment;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   readComments: async () => {
     try {
-      const allComments = await prisma.comments.findMany({
+      const allComments = await prisma.comment.findMany({
         include: {
-          replies: true,
+          childComments: true,
         },
       });
 
       const allCommentsExcludingUserId = allComments.map((item) => {
-        const {user_id, ...rest} = item;
+        const {userId, ...rest} = item;
         return rest;
       });
       return allCommentsExcludingUserId;
@@ -45,11 +66,11 @@ export const commentModel = {
     comment: string
   ) => {
     try {
-      const updatedComment = await prisma.comments.update({
+      const updatedComment = await prisma.comment.update({
         where: {
           id: id,
-          post_id: postId,
-          user_id: userId,
+          postId: postId,
+          userId: userId,
         },
         data: {
           comment: comment,
@@ -63,11 +84,11 @@ export const commentModel = {
 
   deleteComment: async (id: number, postId: number, userId: any) => {
     try {
-      const deletedComment = await prisma.comments.delete({
+      const deletedComment = await prisma.comment.delete({
         where: {
           id: id,
-          post_id: postId,
-          user_id: userId,
+          postId: postId,
+          userId: userId,
         },
       });
       return deletedComment;

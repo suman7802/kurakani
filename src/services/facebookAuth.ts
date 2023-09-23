@@ -17,15 +17,15 @@ function facebookAuth(passport: PassportStatic) {
       async (_accessToken, _refreshToken, profile, done) => {
         try {
           // get user
-          const existingUser = await prisma.Users.findOne({
-            social_id: profile.id,
+          const existingUser = await prisma.user.findOne({
+            socialId: profile.id,
             provider: profile.provider,
           });
           if (!existingUser) {
             // create user
-            const newUser = await prisma.Users.createOne({
-              social_id: profile.id,
-              user_name: profile.displayName,
+            const newUser = await prisma.user.createOne({
+              socialId: profile.id,
+              userName: profile.displayName,
               provider: profile.provider,
             });
             return done(null, newUser);

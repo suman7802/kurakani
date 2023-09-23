@@ -16,6 +16,20 @@ export const commentController = {
       });
   },
 
+  CreateCommentReply: async (req: Request, res: Response) => {
+    const {comment, postId, commentId} = req.body;
+    const userId: any = req.user?.id;
+
+    await commentModel
+      .createCommentReply(userId, postId, commentId, comment)
+      .then((response) => {
+        return res.send(response);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  },
+
   getComments: async (req: Request, res: Response) => {
     await commentModel
       .readComments()

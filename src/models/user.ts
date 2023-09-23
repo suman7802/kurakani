@@ -32,9 +32,9 @@ export async function getCreateUser(req: Request, res: Response) {
   if (user && !OtpNotExpired) {
     // Regenerate OTP and update expiration time
     const otp = getOTP();
-    const otp_expire = otpTime();
+    const otpExpire = otpTime();
 
-    await prisma.users
+    await prisma.user
       .updateMany({
         where: {
           email: email,
@@ -42,7 +42,7 @@ export async function getCreateUser(req: Request, res: Response) {
         },
         data: {
           otp: otp,
-          otp_expire: otp_expire,
+          otpExpire: otpExpire,
         },
       })
       .catch((err) => {
@@ -58,14 +58,14 @@ export async function getCreateUser(req: Request, res: Response) {
     // If no user exists, create a new user
     if (!user) {
       const otp = getOTP();
-      const otp_expire = otpTime();
+      const otpExpire = otpTime();
 
-      await prisma.users
+      await prisma.user
         .create({
           data: {
             email: email,
             otp: otp,
-            otp_expire: otp_expire,
+            otpExpire: otpExpire,
             provider: 'manual',
           },
         })

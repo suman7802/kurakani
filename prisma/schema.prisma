@@ -7,57 +7,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id              Int        @id @default(autoincrement())
-  social_id       String?
-  user_name       String?
-  email           String?
-  provider        String
-  otp             String?
-  otp_expire      DateTime?
-  registered_date DateTime   @default(now())
-  migrated_date   DateTime?
-  posts           Posts[]
-  Comments        Comments[]
+model User {
+  id             Int       @id @default(autoincrement())
+  socialId       String?
+  userName       String?   @unique 
+  email          String?   @unique 
+  provider       String
+  otp            String?
+  otpExpire      DateTime?
+  registeredDate DateTime  @default(now())
+  migratedDate   DateTime?
+  posts          Post[] 
+  comments       Comment[] 
+  Like           Like[]
 }
 
-model Posts {
-  id           Int        @id @default(autoincrement())
-  user_id      Int
-  title        String     @unique
-  blog         String
-  privacy      Boolean    @default(false)
-  created_date DateTime   @default(now())
-  edited_date  DateTime?
-  comments     Comments[]
-  likes        Likes[]
-  user         Users      @relation(fields: [user_id], references: [id])
+model Post {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  title       String    @unique
+  content     String 
+  privacy     Boolean   @default(false)
+  createdDate DateTime  @default(now())
+  editedDate  DateTime?
+  comments    Comment[] 
+  likes       Like[] 
+  user        User      @relation(fields: [userId], references: [id])
 }
 
-model Likes {
-  id         Int   @id @default(autoincrement())
-  post_id    Int
-  like_count Int   @default(0)
-  post       Posts @relation(fields: [post_id], references: [id])
+model Like {
+  id      Int      @id @default(autoincrement())
+  postId  Int
+  userId  Int
+  likedAt DateTime @default(now())
+  post    Post     @relation(fields: [postId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
 }
 
-model Comments {
-  id           Int       @id @default(autoincrement())
-  user_id      Int
-  post_id      Int
-  comment      String
-  created_date DateTime  @default(now())
-  edited_date  DateTime?
-  post         Posts     @relation(fields: [post_id], references: [id])
-  user         Users     @relation(fields: [user_id], references: [id])
-  replies      Replies[]
-}
-
-model Replies {
-  id           Int       @id @default(autoincrement())
-  comment_id   Int
-  reply        String
-  created_date DateTime  @default(now())
-  edited_date  DateTime?
-  commnet      Comments  @relation(fields: [comment_id], references: [id])
+model Comment {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  postId          Int
+  parentCommentId Int?
+  comment         String
+  createdDate     DateTime  @default(now())
+  editedDate      DateTime?
+  post            Post      @relation(fields: [postId], references: [id])
+  user            User      @relation(fields: [userId], references: [id])
+  parentComment   Comment?  @relation("ChildComments", fields: [parentCommentId], references: [id])
+  childComments   Comment[] @relation("ChildComments") 
 }
