@@ -10,6 +10,7 @@ import './types/custom';
 import {authenticate} from './routes/authenticate';
 import {userRouter} from './routes/userRouter';
 import {postRouter} from './routes/postRouter';
+import {likeRouter} from './routes/likeRouter';
 import {commentRouter} from './routes/commentRouter';
 import {authentication} from './middleware/authentication';
 
@@ -36,6 +37,7 @@ app.use(passport.session());
 authenticate(app, passport);
 app.use('/api/user', userRouter);
 app.use('/api/post', authentication, postRouter);
+app.use('/api/like', authentication, likeRouter);
 app.use('/api/comment', authentication, commentRouter);
 
 app.get('/dashboard', (req: Request, res: Response) => {

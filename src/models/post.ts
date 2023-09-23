@@ -42,18 +42,45 @@ export const postModel = {
         where: {
           privacy: false,
         },
-        include: {
-          comments: true,
-          likes: true,
+
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          createdDate: true,
+          editedDate: true,
+
+          comments: {
+            select: {
+              id: true,
+              postId: true,
+              parentComment: true,
+
+              comment: true,
+              createdDate: true,
+              editedDate: true,
+              childComments: {
+                select: {
+                  id: true,
+                  postId: true,
+                  comment: true,
+                  childComments: true,
+                  createdDate: true,
+                  editedDate: true,
+                },
+              },
+            },
+          },
+          likes: {
+            select: {
+              id: true,
+              postId: true,
+            },
+          },
         },
       });
 
-      const allPublicPostsExcludingUserId = allPublicPosts.map((item) => {
-        const {userId, ...rest} = item;
-        return rest;
-      });
-
-      return allPublicPostsExcludingUserId;
+      return allPublicPosts;
     } catch (error) {
       throw error;
     }
