@@ -52,7 +52,7 @@ export const sendMailForOtp = (otp: string, email: string) => {
   const emailConfig = {
     from: process.env.USER_EMAIL,
     subject: 'OTP Verification',
-    text: `Your OTP is : ${otp}\nExpiring in 3 minuet..`,
+    text: `Your OTP is : ${otp}\nExpiring in 3 minute..`,
     to: email,
   };
 

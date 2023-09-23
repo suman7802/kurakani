@@ -12,9 +12,9 @@ export async function otpExpireCheck(email: string) {
         throw err;
       });
 
-    const currentDate: any = new Date();
-    const otpExpireDate: any = user?.otpExpire;
-    const NotExpired = otpExpireDate - currentDate > 0;
+    const currentDate = new Date();
+
+    const NotExpired = user?.otpExpire && user?.otpExpire?.getTime() - currentDate.getTime() > 0;
 
     return NotExpired;
   } catch (error) {
