@@ -22,8 +22,17 @@ export const commentModel = {
 
   readComments: async () => {
     try {
-      const allComments = await prisma.comments.findMany({});
-      return allComments;
+      const allComments = await prisma.comments.findMany({
+        include: {
+          replies: true,
+        },
+      });
+
+      const allCommentsExcludingUserId = allComments.map((item) => {
+        const {user_id, ...rest} = item;
+        return rest;
+      });
+      return allCommentsExcludingUserId;
     } catch (error) {
       throw error;
     }
