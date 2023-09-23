@@ -2,7 +2,7 @@ require('dotenv').config();
 import otpGenerator from 'otp-generator';
 
 import {prisma} from './db';
-import {sendMailForOtp} from '../services/sendOTP';
+import {sendMailForOtp} from '../utils/sendOTP';
 import {Request, Response} from 'express';
 import {getUser} from '../utils/userCheck';
 import {otpExpireCheck} from '../utils/otpExpireCheck';
