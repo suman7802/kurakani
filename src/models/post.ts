@@ -1,5 +1,4 @@
 import {prisma} from './db';
-
 export const postModel = {
   titleAvailability: async (title: string) => {
     try {
@@ -43,8 +42,18 @@ export const postModel = {
         where: {
           privacy: false,
         },
+        include: {
+          comments: true,
+          likes: true,
+        },
       });
-      return allPublicPosts;
+
+      const allPublicPostsExcludingUserId = allPublicPosts.map((item) => {
+        const {user_id, ...rest} = item;
+        return rest;
+      });
+
+      return allPublicPostsExcludingUserId;
     } catch (error) {
       throw error;
     }
@@ -55,6 +64,10 @@ export const postModel = {
       const allPosts = await prisma.posts.findMany({
         where: {
           user_id: userId,
+        },
+        include: {
+          comments: true,
+          likes: true,
         },
       });
       return allPosts;
@@ -69,6 +82,10 @@ export const postModel = {
         where: {
           id: postId,
           user_id: userId,
+        },
+        include: {
+          comments: true,
+          likes: true,
         },
       });
       return allMyPosts;

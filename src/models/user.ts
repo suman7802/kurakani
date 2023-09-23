@@ -18,7 +18,7 @@ function getOTP() {
 // Calculate OTP expiration time (3 minutes from now)
 function otpTime() {
   const expirationTime = new Date();
-  expirationTime.setMinutes(expirationTime.getMinutes() + 3);
+  expirationTime.setMinutes(expirationTime.getMinutes() + 30);
   return expirationTime;
 }
 

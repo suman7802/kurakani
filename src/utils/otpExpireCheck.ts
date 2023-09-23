@@ -1,8 +1,6 @@
 import {prisma} from '../models/db';
 export async function otpExpireCheck(email: string) {
   try {
-    const currentDate = new Date();
-
     const [user] = await prisma.users
       .findMany({
         where: {
@@ -14,11 +12,11 @@ export async function otpExpireCheck(email: string) {
         throw err;
       });
 
-    if (user && user?.otp_expire) {
-      const NotExpired =
-        user.otp_expire?.getUTCSeconds() - currentDate.getUTCSeconds() > 0;
-      return NotExpired;
-    }
+    const currentDate: any = new Date();
+    const otpExpireDate: any = user.otp_expire;
+    const NotExpired = otpExpireDate - currentDate > 0;
+
+    return NotExpired;
   } catch (error) {
     throw error;
   }
