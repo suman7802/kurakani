@@ -7,32 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id             Int       @id @default(autoincrement())
-  socialId       String?
-  userName       String?   @unique 
-  email          String?   @unique 
-  provider       String
-  otp            String?
-  otpExpire      DateTime?
-  registeredDate DateTime  @default(now())
-  migratedDate   DateTime?
-  posts          Post[] 
-  comments       Comment[] 
-  Like           Like[]
-}
-
 model Post {
   id          Int       @id @default(autoincrement())
   userId      Int
   title       String    @unique
-  content     String 
+  content     String
   privacy     Boolean   @default(false)
   createdDate DateTime  @default(now())
   editedDate  DateTime?
-  comments    Comment[] 
-  likes       Like[] 
-  user        User      @relation(fields: [userId], references: [id])
+  comments    Comment[]
+  likes       Like[]
+  user        users     @relation(fields: [userId], references: [id])
 }
 
 model Like {
@@ -41,7 +26,7 @@ model Like {
   userId  Int
   likedAt DateTime @default(now())
   post    Post     @relation(fields: [postId], references: [id])
-  user    User     @relation(fields: [userId], references: [id])
+  user    users    @relation(fields: [userId], references: [id])
 }
 
 model Comment {
@@ -52,8 +37,23 @@ model Comment {
   comment         String
   createdDate     DateTime  @default(now())
   editedDate      DateTime?
-  post            Post      @relation(fields: [postId], references: [id])
-  user            User      @relation(fields: [userId], references: [id])
   parentComment   Comment?  @relation("ChildComments", fields: [parentCommentId], references: [id])
-  childComments   Comment[] @relation("ChildComments") 
+  childComments   Comment[] @relation("ChildComments")
+  post            Post      @relation(fields: [postId], references: [id])
+  user            users     @relation(fields: [userId], references: [id])
+}
+
+model users {
+  id             Int       @id @default(autoincrement())
+  socialId       String?
+  userName       String?   @unique
+  email          String?   @unique
+  provider       String
+  otp            String?
+  otpExpire      DateTime?
+  registeredDate DateTime  @default(now())
+  migratedDate   DateTime?
+  comments       Comment[]
+  Like           Like[]
+  posts          Post[]
 }
