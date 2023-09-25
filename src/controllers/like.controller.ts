@@ -1,8 +1,9 @@
 import {Request, Response} from 'express';
 import {likeModel} from '../models/like';
+import catchAsync from '../utils/catchAsync';
 
 export const likeController = {
-  addLike: async (req: Request, res: Response) => {
+  addLike: catchAsync(async (req: Request, res: Response) => {
     const {postId} = req.body;
     const userId = req.user?.id;
 
@@ -14,9 +15,9 @@ export const likeController = {
       .catch((err) => {
         throw err;
       });
-  },
+  }),
 
-  getLikes: async (req: Request, res: Response) => {
+  getLikes: catchAsync(async (req: Request, res: Response) => {
     await likeModel
       .readLikes()
       .then((response) => {
@@ -25,5 +26,5 @@ export const likeController = {
       .catch((error) => {
         throw error;
       });
-  },
+  }),
 };

@@ -1,7 +1,7 @@
 import {Router} from 'express';
 const userRouter = Router();
+import { userController } from '../controllers/user.controller';
 
-import {getCreateUser} from '../models/user';
+userRouter.post('/otp', userController.user);
 
-userRouter.post('/otp', getCreateUser);
 export {userRouter};

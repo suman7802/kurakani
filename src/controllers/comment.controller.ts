@@ -1,8 +1,9 @@
 import {Request, Response} from 'express';
 import {commentModel} from '../models/comment';
+import catchAsync from '../utils/catchAsync';
 
 export const commentController = {
-  addComment: async (req: Request, res: Response) => {
+  addComment: catchAsync(async (req: Request, res: Response) => {
     const {comment, postId} = req.body;
     const userId = req.user?.id;
 
@@ -14,9 +15,9 @@ export const commentController = {
       .catch((err) => {
         throw err;
       });
-  },
+  }),
 
-  CreateCommentReply: async (req: Request, res: Response) => {
+  CreateCommentReply: catchAsync(async (req: Request, res: Response) => {
     const {comment, postId, commentId} = req.body;
     const userId: any = req.user?.id;
 
@@ -24,13 +25,10 @@ export const commentController = {
       .createCommentReply(userId, postId, commentId, comment)
       .then((response) => {
         return res.send(response);
-      })
-      .catch((err) => {
-        throw err;
       });
-  },
+  }),
 
-  getComments: async (req: Request, res: Response) => {
+  getComments: catchAsync(async (req: Request, res: Response) => {
     await commentModel
       .readComments()
       .then((response) => {
@@ -39,9 +37,9 @@ export const commentController = {
       .catch((error) => {
         throw error;
       });
-  },
+  }),
 
-  updateComment: async (req: Request, res: Response) => {
+  updateComment: catchAsync(async (req: Request, res: Response) => {
     const {id, postId, comment} = req.body;
     const userId = req.user?.id;
     await commentModel
@@ -52,9 +50,9 @@ export const commentController = {
       .catch((error) => {
         throw error;
       });
-  },
+  }),
 
-  deleteComment: async (req: Request, res: Response) => {
+  deleteComment: catchAsync(async (req: Request, res: Response) => {
     const {id, postId} = req.body;
     const userId = req.user?.id;
     await commentModel
@@ -65,5 +63,5 @@ export const commentController = {
       .catch((error) => {
         throw error;
       });
-  },
+  }),
 };

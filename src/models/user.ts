@@ -3,10 +3,9 @@ import otpGenerator from 'otp-generator';
 
 import {prisma} from './db';
 import {sendMailForOtp} from '../utils/sendOTP';
-import {Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
 import {getUser} from '../utils/userCheck';
 import {otpExpireCheck} from '../utils/otpExpireCheck';
-import {serverError} from '../errors/serverError.error';
 
 // Generate OTP
 function getOTP() {
@@ -24,13 +23,8 @@ function otpTime() {
 }
 
 // Handle OTP creation and user creation/updating
-export async function getCreateUser(req: Request, res: Response) {
-  const email = req.body.email;
-  if (!email) {
-    const error = new serverError('Please provide email', 400);
-    throw error;
-  }
 
+export async function getCreateUser(email: string) {
   const OtpNotExpired = await otpExpireCheck(email);
   const user = await getUser(email);
 
@@ -58,7 +52,7 @@ export async function getCreateUser(req: Request, res: Response) {
       throw err;
     });
 
-    return res.send(response);
+    return response;
   } else {
     // If no user exists, create a new user
     if (!user) {
@@ -79,10 +73,10 @@ export async function getCreateUser(req: Request, res: Response) {
         });
 
       const response = await sendMailForOtp(otp, email);
-      return res.send(response);
+      return response;
     } else {
       // If user exists, and unexpired otp
-      res.send('use your valid otp to login');
+      return 'use your valid otp to login';
     }
   }
 }
