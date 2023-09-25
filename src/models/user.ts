@@ -6,6 +6,7 @@ import {sendMailForOtp} from '../utils/sendOTP';
 import {Request, Response} from 'express';
 import {getUser} from '../utils/userCheck';
 import {otpExpireCheck} from '../utils/otpExpireCheck';
+import {serverError} from '../errors/serverError.error';
 
 // Generate OTP
 function getOTP() {
@@ -25,6 +26,10 @@ function otpTime() {
 // Handle OTP creation and user creation/updating
 export async function getCreateUser(req: Request, res: Response) {
   const email = req.body.email;
+  if (!email) {
+    const error = new serverError('Please provide email', 400);
+    throw error;
+  }
 
   const OtpNotExpired = await otpExpireCheck(email);
   const user = await getUser(email);

@@ -13,6 +13,7 @@ import {postRouter} from './routes/postRouter';
 import {likeRouter} from './routes/likeRouter';
 import {commentRouter} from './routes/commentRouter';
 import {authentication} from './middleware/authentication';
+import {errorHandler} from './errors/errorHandler.error';
 
 const app: Application = express();
 const port = process.env.PORT;
@@ -45,6 +46,7 @@ app.get('/dashboard', (req: Request, res: Response) => {
     status: 'successfully login',
   });
 });
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
