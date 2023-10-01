@@ -25,6 +25,9 @@ export const commentController = {
       .createCommentReply(userId, postId, commentId, comment)
       .then((response) => {
         return res.send(response);
+      })
+      .catch((err) => {
+        throw err;
       });
   }),
 

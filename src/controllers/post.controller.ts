@@ -13,29 +13,47 @@ export const postController = {
         .createPost(title, blog, privacy, userId)
         .then((response) => {
           return res.send(response);
+        })
+        .catch((err) => {
+          throw err;
         });
     }
   }),
 
   getAllPublicPost: catchAsync(async (req: Request, res: Response) => {
-    await postModel.readAllPublicPost().then((response) => {
-      return res.send(response);
-    });
+    await postModel
+      .readAllPublicPost()
+      .then((response) => {
+        return res.send(response);
+      })
+      .catch((err) => {
+        throw err;
+      });
   }),
 
   getAllPost: catchAsync(async (req: Request, res: Response) => {
     const userId = req.user?.id;
-    await postModel.readAllPost(userId).then((response) => {
-      res.send(response);
-    });
+    await postModel
+      .readAllPost(userId)
+      .then((response) => {
+        res.send(response);
+      })
+      .catch((err) => {
+        throw err;
+      });
   }),
 
   getPost: catchAsync(async (req: Request, res: Response) => {
     const userId = req.user?.id;
     const postId = req.body.id;
-    await postModel.readPost(userId, postId).then((response) => {
-      res.send(response);
-    });
+    await postModel
+      .readPost(userId, postId)
+      .then((response) => {
+        res.send(response);
+      })
+      .catch((err) => {
+        throw err;
+      });
   }),
 
   updatePost: catchAsync(async (req: Request, res: Response) => {
@@ -45,14 +63,22 @@ export const postController = {
       .updatePost(id, userId, title, blog, privacy)
       .then((response) => {
         res.send(response);
+      })
+      .catch((err) => {
+        throw err;
       });
   }),
 
   deletePost: catchAsync(async (req: Request, res: Response) => {
     const postId = req.body.id;
     const userId = req.user?.id;
-    await postModel.deletePost(postId, userId).then((response) => {
-      res.send(response);
-    });
+    await postModel
+      .deletePost(postId, userId)
+      .then((response) => {
+        res.send(response);
+      })
+      .catch((err) => {
+        throw err;
+      });
   }),
 };
