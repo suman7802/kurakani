@@ -5,12 +5,8 @@ import catchAsync from '../utils/catchAsync';
 export const userController = {
   user: catchAsync(async (req: Request, res: Response) => {
     const email = req.body.email;
-    await getCreateUser(email)
-      .then((response) => {
-        return res.send(response);
-      })
-      .catch((err) => {
-        throw err;
-      });
+    await getCreateUser(email).then((response) => {
+      return res.send(response);
+    });
   }),
 };

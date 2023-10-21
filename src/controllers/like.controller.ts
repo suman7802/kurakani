@@ -7,24 +7,14 @@ export const likeController = {
     const {postId} = req.body;
     const userId = req.user?.id;
 
-    await likeModel
-      .createLikes(userId, postId)
-      .then((response) => {
-        return res.send(response);
-      })
-      .catch((err) => {
-        throw err;
-      });
+    await likeModel.createLikes(userId, postId).then((response) => {
+      return res.send(response);
+    });
   }),
 
   getLikes: catchAsync(async (req: Request, res: Response) => {
-    await likeModel
-      .readLikes()
-      .then((response) => {
-        return res.json({likeCount: response});
-      })
-      .catch((error) => {
-        throw error;
-      });
+    await likeModel.readLikes().then((response) => {
+      return res.json({likeCount: response});
+    });
   }),
 };
