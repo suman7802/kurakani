@@ -5,6 +5,7 @@ import catchAsync from '../utils/catchAsync';
 export const commentController = {
   addComment: catchAsync(async (req: Request, res: Response) => {
     const {comment, postId} = req.body;
+
     const userId = req.user?.id;
 
     await commentModel

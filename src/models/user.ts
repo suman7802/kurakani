@@ -31,7 +31,7 @@ export async function getCreateUser(email: string) {
     const otp = getOTP();
     const otpExpire = otpTime();
 
-    await prisma.user.updateMany({
+    await prisma.users.updateMany({
       where: {
         email: email,
         provider: 'manual',
@@ -49,7 +49,7 @@ export async function getCreateUser(email: string) {
       const otp = getOTP();
       const otpExpire = otpTime();
 
-      await prisma.user.create({
+      await prisma.users.create({
         data: {
           email: email,
           otp: otp,
