@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import {ApplicationError} from '../errors/application-error';
-import {PrismaClient, Prisma} from '@prisma/client';
+import {Prisma} from '@prisma/client';
 
 export function errorHandler(
   error: Error,
@@ -17,9 +17,15 @@ export function errorHandler(
     });
   } else {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-        res.status(400).json({error: 'Title is already taken'});
+      //@ts-ignore
+      if (error.meta?.target[0] === 'title') {
+        res.status(406).json({error: 'Title is already taken'});
       }
+    }
+    if (error.name === 'PrismaClientValidationError') {
+      res.json({
+        error: 'Missing argument',
+      });
     }
     res.status(400).json({error: 'Internal Server Error'});
   }

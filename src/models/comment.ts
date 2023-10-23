@@ -1,3 +1,4 @@
+import {error} from 'console';
 import {prisma} from './db';
 
 export const commentModel = {
