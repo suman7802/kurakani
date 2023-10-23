@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import {getCreateUser} from '../models/user';
-import catchAsync from '../utils/catchAsync';
+import catchAsync from '../errors/catchAsync';
 
 export const userController = {
   user: catchAsync(async (req: Request, res: Response) => {

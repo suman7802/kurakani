@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import {likeModel} from '../models/like';
-import catchAsync from '../utils/catchAsync';
+import catchAsync from '../errors/catchAsync';
 
 export const likeController = {
   addLike: catchAsync(async (req: Request, res: Response) => {

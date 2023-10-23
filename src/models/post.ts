@@ -1,14 +1,5 @@
 import {prisma} from './db';
 export const postModel = {
-  titleAvailability: async (title: string) => {
-    const [response] = await prisma.post.findMany({
-      where: {
-        title: title,
-      },
-    });
-    return response;
-  },
-
   createPost: async (
     title: string,
     content: string,

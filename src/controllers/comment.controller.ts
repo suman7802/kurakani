@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import {commentModel} from '../models/comment';
-import catchAsync from '../utils/catchAsync';
+import catchAsync from '../errors/catchAsync';
 
 export const commentController = {
   addComment: catchAsync(async (req: Request, res: Response) => {

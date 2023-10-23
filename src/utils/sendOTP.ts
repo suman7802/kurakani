@@ -10,15 +10,14 @@ const createTransporter = async () => {
       process.env.NODEMAILER_CLIENT_SECRET,
       'https://developers.google.com/oauthplayground'
     );
-
     oauth2Client.setCredentials({
       refresh_token: process.env.NODEMAILER_REFRESH_TOKEN,
     });
 
     const accessToken = await new Promise((resolve, reject) => {
-      oauth2Client.getAccessToken((err, token) => {
-        if (err) {
-          reject();
+      oauth2Client.getAccessToken((error, token) => {
+        if (error) {
+          reject(error);
         }
         resolve(token);
       });
@@ -36,7 +35,6 @@ const createTransporter = async () => {
         refreshToken: process.env.NODEMAILER_REFRESH_TOKEN,
       },
     });
-
     return transporter;
   } catch (err) {
     throw err;
@@ -45,7 +43,11 @@ const createTransporter = async () => {
 
 let mailTransporter: Transporter;
 (async () => {
-  mailTransporter = (await createTransporter()) as Transporter;
+  try {
+    mailTransporter = await createTransporter();
+  } catch (error) {
+    console.log(`${error} Transporter`);
+  }
 })();
 
 export const sendMailForOtp = (otp: string, email: string) => {

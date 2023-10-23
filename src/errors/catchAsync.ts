@@ -8,7 +8,6 @@ type controllerFunction = (
 export default (fn: controllerFunction) => {
   return (req: Request, res: Response, next: NextFunction) => {
     fn(req, res, next).catch((err) => {
-      console.log(err);
       next(err);
     });
   };

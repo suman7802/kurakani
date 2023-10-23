@@ -1,20 +1,17 @@
 import {Request, Response} from 'express';
 import {postModel} from '../models/post';
-import catchAsync from '../utils/catchAsync';
+import catchAsync from '../errors/catchAsync';
 
 export const postController = {
   addPost: catchAsync(async (req: Request, res: Response) => {
     const {title, blog, privacy} = req.body;
     const userId = req.user?.id;
-    const alreadyHaveTitle = await postModel.titleAvailability(title);
 
-    if (!alreadyHaveTitle) {
-      await postModel
-        .createPost(title, blog, privacy, userId)
-        .then((response) => {
-          return res.send(response);
-        });
-    }
+    await postModel
+      .createPost(title, blog, privacy, userId)
+      .then((response) => {
+        return res.send(response);
+      });
   }),
 
   getAllPublicPost: catchAsync(async (req: Request, res: Response) => {

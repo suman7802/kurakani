@@ -7,13 +7,13 @@ import session from 'express-session';
 import morgan from 'morgan';
 
 import './types/custom';
-import {authenticate} from './routes/authenticate';
-import {userRouter} from './routes/userRouter';
-import {postRouter} from './routes/postRouter';
-import {likeRouter} from './routes/likeRouter';
-import {commentRouter} from './routes/commentRouter';
+import {authenticate} from './routes/authenticate.router';
+import {userRouter} from './routes/user.router';
+import {postRouter} from './routes/post.router';
+import {likeRouter} from './routes/like.router';
+import {commentRouter} from './routes/comment.router';
 import {authentication} from './middleware/authentication';
-import {errorHandler} from './errors/errorHandler.error';
+import {errorHandler} from './controllers/errorHandler.controller';
 
 const app: Application = express();
 const port = process.env.PORT;
@@ -40,14 +40,13 @@ app.use('/api/user', userRouter);
 app.use('/api/post', authentication, postRouter);
 app.use('/api/like', authentication, likeRouter);
 app.use('/api/comment', authentication, commentRouter);
-
 app.get('/dashboard', (req: Request, res: Response) => {
   res.json({
     status: 'successfully login',
   });
 });
-app.use(errorHandler);
 
+app.use(errorHandler);
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
