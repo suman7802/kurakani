@@ -9,4 +9,11 @@ export const userController = {
       return res.send(response);
     });
   }),
+
+  logout: (req: Request, res: Response) => {
+    req.logout({}, (error) => {
+      res.send(error);
+    });
+    res.redirect('/logout');
+  },
 };

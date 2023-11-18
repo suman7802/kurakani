@@ -27,6 +27,7 @@ export function errorHandler(
         error: 'Missing argument',
       });
     }
+    console.log(error);
     res.status(400).json({error: 'Internal Server Error'});
   }
 }
